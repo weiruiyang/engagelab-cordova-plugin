@@ -1,0 +1,19 @@
+{
+  "name": "MTPushEngagelab",
+  "version": "1.0.0",
+  "description": "MTPush Engagelab cordova simple feature",
+  "cordova": {
+    "id": "com.engagelab.mtpush",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  },
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-android",
+    "cordova-ios"
+  ],
+  "author": "",
+  "license": "ISC"
+}

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      <title>JPush Phonegap Simple Demo</title>
+      <link href="css/jquery.mobile-1.1.1.css" rel="stylesheet" type="text/css" />
+      <script type="text/javascript" src="js/jquery.js"></script>
+      <script type="text/javascript" src="js/jquery.mobile-1.1.1.js"></script>
+      <script type="text/javascript" src="cordova.js"></script>
+      <script type="text/javascript">
+
+        var onDeviceReady = function() {
+          initiateUI();
+        };
+
+        var getRegistrationID = function() {
+          window.cordova.plugins.MTPushEngagelab.getRegistrationId(onGetRegistrationID);
+        };
+
+        var onMTCommonReceiver = function (dataAll){
+          console.log("MTPushEngagelab:onMTCommonReceiver dataAll: " + JSON.stringify(dataAll));
+          $("#notificationType").html(dataAll.event_name);
+          $("#messageResult").html(JSON.stringify(dataAll.event_data));
+          $("#messageResultAll").html("<br/>"+$("#messageResultAll").text() +"<br/>"+ JSON.stringify(dataAll));
+        }
+
+        var onGetRegistrationID = function(data) {
+          try {
+            console.log("MTPushEngagelab:registrationID is " + data);
+
+            if (data.length == 0) {
+              var t1 = window.setTimeout(getRegistrationID, 1000);
+            }
+
+            $("#registrationId").html(data);
+          } catch (exception) {
+            console.log(exception);
+          }
+        };
+
+
+        var initiateUI = function() {
+          try {
+            window.cordova.plugins.MTPushEngagelab.configDebugMode(true);
+            window.cordova.plugins.MTPushEngagelab.init();
+            window.setTimeout(getRegistrationID, 1000);
+          } catch (exception) {
+            console.log(exception);
+          }
+        };
+
+        document.addEventListener("deviceready", onDeviceReady, false);
+        document.addEventListener("MTPushEngagelab.onMTCommonReceiver", onMTCommonReceiver, false);
+      </script>
+  </head>
+
+  <body>
+    <div data-role="page" id="page">
+      <div data-role="content">
+        <form>
+          <div class="ui-body ui-body-b">
+            <div data-role="fieldcontain">
+              <center>
+                <h3>MTPushEngagelabPlugin Example</h3>
+              </center>
+              <span name="alias" id="alias"></span>
+              <hr/>
+              <label>RegistrationID: </label>
+              <label id="registrationId">null</label>
+            </div>
+
+            <div data-role="fieldcontain">
+              <label id="notificationPrompt">接受的通知类型:</label>
+              <label id="notificationType"></label>
+            </div>
+            <div data-role="fieldcontain">
+              <label id="messagePrompt">接受的消息内容:</label>
+              <label id="messageResult"></label>
+            </div>
+            <div data-role="fieldcontain">
+              <label id="messageAll">接受所有消息:</label>
+              <label id="messageResultAll"></label>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ENGAGELAB_PRIVATES_CHANNEL_low">LOW</string>
+    <string name="ENGAGELAB_PRIVATES_CHANNEL_normal">NORMAL</string>
+    <string name="ENGAGELAB_PRIVATES_CHANNEL_high">HIGH</string>
+</resources>

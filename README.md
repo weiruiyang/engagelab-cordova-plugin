@@ -78,3 +78,9 @@ cordova plugin for push SDK
   --variable ENGAGELAB_PRIVATES_PROCESS=:your_process
   ```
 
+
+## Usage
+
+### API
+
+- [Api](/doc/api.md)

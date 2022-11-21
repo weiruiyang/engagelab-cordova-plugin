@@ -54,7 +54,7 @@ MTPushEngagelab.prototype.init = function () {
  *
  * @param heartbeatInterval 时间单位为毫秒、必须大于0、默认值是4分50秒\
  */
-MTPushEngagelab.prototype.configHeartbeatInterval = function (heartbeatInterval) {
+MTPushEngagelab.prototype.configHeartbeatIntervalAndroid = function (heartbeatInterval) {
     console.log("configHeartbeatInterval" + heartbeatInterval);
     this.callNative("configHeartbeatInterval", [heartbeatInterval], null);
 };
@@ -65,7 +65,7 @@ MTPushEngagelab.prototype.configHeartbeatInterval = function (heartbeatInterval)
  * 需要在Application.onCreate()方法中调用
  * @param connectRetryCount 重试的次数、默认值为3、最少3次
  */
-MTPushEngagelab.prototype.configConnectRetryCount = function (connectRetryCount) {
+MTPushEngagelab.prototype.configConnectRetryCountAndroid = function (connectRetryCount) {
     console.log("configConnectRetryCount" + connectRetryCount);
     this.callNative("configConnectRetryCount", [connectRetryCount], null);
 }
@@ -89,7 +89,7 @@ MTPushEngagelab.prototype.configDebugMode = function (enable) {
  *
  * @param context 不为空
  */
-MTPushEngagelab.prototype.configSM4 = function () {
+MTPushEngagelab.prototype.configSM4Android = function () {
     console.log("configSM4");
     this.callNative("configSM4", [], null);
 }
@@ -100,7 +100,7 @@ MTPushEngagelab.prototype.configSM4 = function () {
  * @param context 不为空
  * @return userId
  */
-MTPushEngagelab.prototype.getUserId = function (successCallback, errorCallback) {
+MTPushEngagelab.prototype.getUserIdAndroid = function (successCallback, errorCallback) {
     console.log("getUserId");
     this.callNative("getUserId", [], successCallback, errorCallback);
 }
@@ -129,7 +129,7 @@ MTPushEngagelab.prototype.getRegistrationId = function (successCallback, errorCa
  *
  * @param context 不为空 //TODO weiry
  */
-MTPushEngagelab.prototype.goToAppNotificationSettings = function () {
+MTPushEngagelab.prototype.goToAppNotificationSettingsAndroid = function () {
     console.log("goToAppNotificationSettings");
     this.callNative("goToAppNotificationSettings", [], null);
 }
@@ -148,7 +148,7 @@ MTPushEngagelab.prototype.goToAppNotificationSettings = function () {
  *
  * @param context 不能为空
  */
-MTPushEngagelab.prototype.turnOnPush = function () {
+MTPushEngagelab.prototype.turnOnPushAndroid = function () {
     console.log("turnOnPush");
     this.callNative("turnOnPush", [], null);
 }
@@ -165,7 +165,7 @@ MTPushEngagelab.prototype.turnOnPush = function () {
  *
  * @param context 不能为空
  */
-MTPushEngagelab.prototype.turnOffPush = function () {
+MTPushEngagelab.prototype.turnOffPushAndroid = function () {
     console.log("turnOffPush");
     this.callNative("turnOffPush", [], null);
 }
@@ -178,7 +178,7 @@ MTPushEngagelab.prototype.turnOffPush = function () {
  * @param endHour   允许通知展示的结束时间（ 24 小时制，范围为 0 到 23 ），beginHour不能大于等于endHour
  * @param weekDays  允许通知展示的星期数组（ 7 日制，范围为 1 到 7），空数组代表任何时候都不展示通知
  */
-MTPushEngagelab.prototype.setNotificationShowTime = function (beginHour, endHour, weekDays) {
+MTPushEngagelab.prototype.setNotificationShowTimeAndroid = function (beginHour, endHour, weekDays) {
     console.log("setNotificationShowTime");
     this.callNative("setNotificationShowTime", [beginHour, endHour, weekDays], null);
 }
@@ -188,7 +188,7 @@ MTPushEngagelab.prototype.setNotificationShowTime = function (beginHour, endHour
  *
  * @param context 不为空
  */
-MTPushEngagelab.prototype.resetNotificationShowTime = function () {
+MTPushEngagelab.prototype.resetNotificationShowTimeAndroid = function () {
     console.log("resetNotificationShowTime");
     this.callNative("resetNotificationShowTime", [], null);
 }
@@ -203,7 +203,7 @@ MTPushEngagelab.prototype.resetNotificationShowTime = function () {
  * @param endHour     允许通知静默的结束时间，单位小时（ 24 小时制，范围为 0 到 23 ）
  * @param endMinute   允许通知静默的结束时间，单位分钟（ 60 分钟制，范围为 0 到 59 ）
  */
-MTPushEngagelab.prototype.setNotificationSilenceTime = function (beginHour, beginMinute, endHour, endMinute) {
+MTPushEngagelab.prototype.setNotificationSilenceTimeAndroid = function (beginHour, beginMinute, endHour, endMinute) {
     console.log("setNotificationSilenceTime");
     this.callNative("setNotificationSilenceTime", [beginHour, beginMinute, endHour, endMinute], null);
 }
@@ -213,7 +213,7 @@ MTPushEngagelab.prototype.setNotificationSilenceTime = function (beginHour, begi
  *
  * @param context 不为空
  */
-MTPushEngagelab.prototype.resetNotificationSilenceTime = function () {
+MTPushEngagelab.prototype.resetNotificationSilenceTimeAndroid = function () {
     console.log("resetNotificationSilenceTime");
     this.callNative("resetNotificationSilenceTime", [], null);
 }
@@ -225,7 +225,7 @@ MTPushEngagelab.prototype.resetNotificationSilenceTime = function () {
  * @param context 不为空
  * @param count   限制通知栏的通知数量，超出限制数量则移除最老通知，不能小于等于0
  */
-MTPushEngagelab.prototype.setNotificationCount = function (count) {
+MTPushEngagelab.prototype.setNotificationCountAndroid = function (count) {
     console.log("setNotificationCount");
     this.callNative("setNotificationCount", [count], null);
 }
@@ -235,7 +235,7 @@ MTPushEngagelab.prototype.setNotificationCount = function (count) {
  *
  * @param context 不为空
  */
-MTPushEngagelab.prototype.resetNotificationCount = function () {
+MTPushEngagelab.prototype.resetNotificationCountAndroid = function () {
     console.log("resetNotificationCount");
     this.callNative("resetNotificationCount", [], null);
 }
@@ -271,7 +271,7 @@ MTPushEngagelab.prototype.resetNotificationBadge = function () {
  * @param platform          厂商，取值范围（1:mi、2:huawei、3:meizu、4:oppo、5:vivo、8:google）
  * @param platformMessageId 厂商消息id，可为空
  */
-MTPushEngagelab.prototype.reportNotificationArrived = function (messageId, platform, platformMessageId) {
+MTPushEngagelab.prototype.reportNotificationArrivedAndroid = function (messageId, platform, platformMessageId) {
     console.log("reportNotificationArrived");
     this.callNative("reportNotificationArrived", [messageId, platform, platformMessageId], null);
 }
@@ -286,7 +286,7 @@ MTPushEngagelab.prototype.reportNotificationArrived = function (messageId, platf
  * @param platform          厂商，取值范围（1:mi、2:huawei、3:meizu、4:oppo、5:vivo、8:google）
  * @param platformMessageId 厂商消息id，可为空
  */
-MTPushEngagelab.prototype.reportNotificationClicked = function (messageId, platform, platformMessageId) {
+MTPushEngagelab.prototype.reportNotificationClickedAndroid = function (messageId, platform, platformMessageId) {
     console.log("reportNotificationClicked");
     this.callNative("reportNotificationClicked", [messageId, platform, platformMessageId], null);
 }
@@ -302,7 +302,7 @@ MTPushEngagelab.prototype.reportNotificationClicked = function (messageId, platf
  * @param platform          厂商，取值范围（1:mi、2:huawei、3:meizu、4:oppo、5:vivo、8:google）
  * @param platformMessageId 厂商消息id，可为空
  */
-MTPushEngagelab.prototype.reportNotificationDeleted = function (messageId, platform, platformMessageId) {
+MTPushEngagelab.prototype.reportNotificationDeletedAndroid = function (messageId, platform, platformMessageId) {
     console.log("reportNotificationDeleted");
     this.callNative("reportNotificationDeleted", [messageId, platform, platformMessageId], null);
 }
@@ -317,7 +317,7 @@ MTPushEngagelab.prototype.reportNotificationDeleted = function (messageId, platf
  * @param platform          厂商，取值范围（1:mi、2:huawei、3:meizu、4:oppo、5:vivo、8:google）
  * @param platformMessageId 厂商消息id，可为空
  */
-MTPushEngagelab.prototype.reportNotificationOpened = function (messageId, platform, platformMessageId) {
+MTPushEngagelab.prototype.reportNotificationOpenedAndroid = function (messageId, platform, platformMessageId) {
     console.log("reportNotificationOpened");
     this.callNative("reportNotificationOpened", [messageId, platform, platformMessageId], null);
 }
@@ -333,7 +333,7 @@ MTPushEngagelab.prototype.reportNotificationOpened = function (messageId, platfo
  * @param token    厂商返回的token，不为空
  * @param region    //目前只有小米、OPPO才区分国内和国际版，其他厂商不区分;没有不用传
  */
-MTPushEngagelab.prototype.uploadPlatformToken = function (platform, token, region) {
+MTPushEngagelab.prototype.uploadPlatformTokenAndroid = function (platform, token, region) {
     console.log("uploadPlatformToken");
     this.callNative("uploadPlatformToken", [platform, token, region], null);
 }

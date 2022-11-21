@@ -68,7 +68,7 @@ window.cordova.plugins.MTPushEngagelab.configDebugMode(enable)
 window.cordova.plugins.MTPushEngagelab.configDebugMode(true)
 ```
 
-## 获取 RegistrationID
+## 获取 RegistrationID （android/ios都支持）
 
 ### getRegistrationId
 

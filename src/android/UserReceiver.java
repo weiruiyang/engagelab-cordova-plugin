@@ -24,7 +24,7 @@ public class UserReceiver extends MTCommonReceiver {
     @Override
     public void onNotificationStatus(Context context, boolean enable) {
         MTPushEngagelab.logD(TAG, "onNotificationStatus:" + enable);
-        MTPushEngagelab.onCommonReceiver("onNotificationStatus", enable + "");
+        MTPushEngagelab.onCommonReceiver("onNotificationStatus", MsgToJson.booleanToJson(enable));
     }
 
     /**
@@ -36,7 +36,7 @@ public class UserReceiver extends MTCommonReceiver {
     @Override
     public void onConnectStatus(Context context, boolean enable) {
         MTPushEngagelab.logD(TAG, "onConnectState:" + enable);
-        MTPushEngagelab.onCommonReceiver("onConnectStatus", enable + "");
+        MTPushEngagelab.onCommonReceiver("onConnectStatus", MsgToJson.booleanToJson(enable));
     }
 
     /**
@@ -48,7 +48,7 @@ public class UserReceiver extends MTCommonReceiver {
     @Override
     public void onNotificationArrived(Context context, NotificationMessage notificationMessage) {
         MTPushEngagelab.logD(TAG, "onNotificationArrived:" + notificationMessage.toString());
-        MTPushEngagelab.onCommonReceiver("onNotificationArrived", notificationMessage.toString());
+        MTPushEngagelab.onCommonReceiver("onNotificationArrived", MsgToJson.notificationMessageToJson(notificationMessage));
     }
 
     /**
@@ -60,7 +60,7 @@ public class UserReceiver extends MTCommonReceiver {
     @Override
     public void onNotificationClicked(Context context, NotificationMessage notificationMessage) {
         MTPushEngagelab.logD(TAG, "onNotificationClicked:" + notificationMessage.toString());
-        MTPushEngagelab.onCommonReceiver("onNotificationClicked", notificationMessage.toString());
+        MTPushEngagelab.onCommonReceiver("onNotificationClicked", MsgToJson.notificationMessageToJson(notificationMessage));
     }
 
     /**
@@ -72,7 +72,7 @@ public class UserReceiver extends MTCommonReceiver {
     @Override
     public void onNotificationDeleted(Context context, NotificationMessage notificationMessage) {
         MTPushEngagelab.logD(TAG, "onNotificationDeleted:" + notificationMessage.toString());
-        MTPushEngagelab.onCommonReceiver("onNotificationDeleted", notificationMessage.toString());
+        MTPushEngagelab.onCommonReceiver("onNotificationDeleted", MsgToJson.notificationMessageToJson(notificationMessage));
     }
 
     /**
@@ -84,7 +84,7 @@ public class UserReceiver extends MTCommonReceiver {
     @Override
     public void onCustomMessage(Context context, CustomMessage customMessage) {
         MTPushEngagelab.logD(TAG, "onCustomMessage:" + customMessage.toString());
-        MTPushEngagelab.onCommonReceiver("onCustomMessage", customMessage.toString());
+        MTPushEngagelab.onCommonReceiver("onCustomMessage", MsgToJson.customMessageToJson(customMessage));
     }
 
     /**
@@ -96,8 +96,7 @@ public class UserReceiver extends MTCommonReceiver {
     @Override
     public void onPlatformToken(Context context, PlatformTokenMessage platformTokenMessage) {
         MTPushEngagelab.logD(TAG, "onPlatformToken:" + platformTokenMessage.toString());
-        MTPushEngagelab.onCommonReceiver("onPlatformToken", platformTokenMessage.toString());
+        MTPushEngagelab.onCommonReceiver("onPlatformToken", MsgToJson.platformTokenMessageToJson(platformTokenMessage));
     }
-
 }
 

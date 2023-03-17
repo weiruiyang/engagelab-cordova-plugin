@@ -122,7 +122,8 @@ static MTPushEngagelab *SharedJPushPlugin;
 }
 
 -(void)setBadge:(NSArray* )data {
-    int value = [data objectAtIndex:0];
+    int value = [[data objectAtIndex:0] intValue];
+    [UIApplication sharedApplication].applicationIconBadgeNumber = value;
     [MTPushService setBadge:value];
 }
 

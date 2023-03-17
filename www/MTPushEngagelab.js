@@ -30,7 +30,7 @@ MTPushEngagelab.prototype.callNative = function (
     errorCallback
 ) {
     if (errorCallback) {
-        cordova.exec(successCallback, errorCallback, "MTPushEngagelab", name, args);
+        cordova.exec(successCallback, errorCallback, "MTPushEngagelab","channelMTPushEngagelab", [name, args]);
     } else {
         cordova.exec(
             successCallback,

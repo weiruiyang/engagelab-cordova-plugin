@@ -14,6 +14,11 @@
 @class UNNotificationRequest;
 @class UNNotification;
 @protocol MTPushRegisterDelegate;
+@protocol MTPushGeofenceDelegate;
+
+typedef void (^MTPushTagsOperationCompletion)(NSInteger iResCode, NSSet *iTags, NSInteger seq);
+typedef void (^MTPushTagValidOperationCompletion)(NSInteger iResCode, NSSet *iTags, NSInteger seq, BOOL isBind);
+typedef void (^MTPushAliasOperationCompletion)(NSInteger iResCode, NSString *iAlias, NSInteger seq);
 
 extern NSString *const kMTCNetworkIsConnectingNotification; // 正在连接中
 extern NSString *const kMTCNetworkDidSetupNotification;     // 建立连接
@@ -42,6 +47,12 @@ typedef NS_ENUM(NSUInteger, MTPushAuthorizationStatus) {
     MTPushAuthorizationStatusAuthorized,    // The application is authorized to post user notifications.
     MTPushAuthorizationStatusProvisional NS_AVAILABLE_IOS(12.0),    // The application is authorized to post non-interruptive user notifications.
 };
+
+typedef NS_ENUM(NSUInteger, P_NetworkEncryptionType){
+  AESEncryptionType = 0,
+  SM4EncryptionType = 1,
+};
+
 
 /*!
  * 通知注册实体类
@@ -143,6 +154,9 @@ typedef NS_ENUM(NSUInteger, MTPushAuthorizationStatus) {
  */
 @interface MTPushService : NSObject
 
+///不设置默认为AES加密
++ (void)setEncryptionType:(P_NetworkEncryptionType)encryptionType;
+
 ///----------------------------------------------------
 /// @name Setup 启动相关
 ///----------------------------------------------------
@@ -210,6 +224,9 @@ typedef NS_ENUM(NSUInteger, MTPushAuthorizationStatus) {
 
 + (void)registerDeviceToken:(NSData *)deviceToken;
 
+
++ (void)analyticsDevicetokenFailure:(NSError *)error;
+
 /*!
  * @abstract 处理收到的 APNs 消息
  */
@@ -226,6 +243,155 @@ typedef NS_ENUM(NSUInteger, MTPushAuthorizationStatus) {
 */
 + (void)openSettingsForNotification:(void (^)(BOOL success))completionHandler NS_AVAILABLE_IOS(8_0);
 
+/*!
+ * Tags操作接口
+ * 支持增加/覆盖/删除/清空/查询操作
+ */
+
+/**
+ 增加tags
+
+ @param tags 需要增加的tags集合
+ @param completion 响应回调
+ @param seq 请求序列号
+ */
++ (void)addTags:(NSSet<NSString *> *)tags
+     completion:(MTPushTagsOperationCompletion)completion
+            seq:(NSInteger)seq;
+
+/**
+ 覆盖tags
+ 调用该接口会覆盖用户所有的tags
+
+ @param tags 需要设置的tags集合
+ @param completion 响应回调
+ @param seq 请求序列号
+ */
++ (void)setTags:(NSSet<NSString *> *)tags
+     completion:(MTPushTagsOperationCompletion)completion
+            seq:(NSInteger)seq;
+
+/**
+ 删除指定tags
+
+ @param tags 需要删除的tags集合
+ @param completion 响应回调
+ @param seq 请求序列号
+ */
++ (void)deleteTags:(NSSet<NSString *> *)tags
+        completion:(MTPushTagsOperationCompletion)completion
+               seq:(NSInteger)seq;
+
+/**
+ 清空所有tags
+ @param completion 响应回调
+ @param seq 请求序列号
+ */
++ (void)cleanTags:(MTPushTagsOperationCompletion)completion
+              seq:(NSInteger)seq;
+
+/**
+ 查询全部tags
+
+ @param completion 响应回调，请在回调中获取查询结果
+ @param seq 请求序列号
+ */
++ (void)getAllTags:(MTPushTagsOperationCompletion)completion
+               seq:(NSInteger)seq;
+
+/**
+ 验证tag是否绑定
+ 
+ @param completion 响应回调，回调中查看是否绑定
+ @param seq 请求序列号
+ */
++ (void)validTag:(NSString *)tag
+      completion:(MTPushTagValidOperationCompletion)completion
+             seq:(NSInteger)seq;
+
+/**
+ 设置Alias
+
+ @param alias 需要设置的alias
+ @param completion 响应回调
+ @param seq 请求序列号
+ */
++ (void)setAlias:(NSString *)alias
+      completion:(MTPushAliasOperationCompletion)completion
+             seq:(NSInteger)seq;
+
+/**
+ 删除alias
+
+ @param completion 响应回调
+ @param seq 请求序列号
+ */
++ (void)deleteAlias:(MTPushAliasOperationCompletion)completion
+                seq:(NSInteger)seq;
+
+/**
+ 查询当前alias
+
+ @param completion 响应回调
+ @param seq 请求序列号
+ */
++ (void)getAlias:(MTPushAliasOperationCompletion)completion
+             seq:(NSInteger)seq;
+
+
+/*!
+ * @abstract 过滤掉无效的 tags
+ *
+ * @discussion 如果 tags 数量超过限制数量, 则返回靠前的有效的 tags.
+ * 建议设置 tags 前用此接口校验. SDK 内部也会基于此接口来做过滤.
+ */
++ (NSSet *)filterValidTags:(NSSet *)tags;
+
+/*!
+ * @abstract 开启Crash日志收集
+ *
+ * @discussion 默认是关闭状态.
+ */
++ (void)crashLogON;
+
+/*!
+ * @abstract 地理位置上报
+ *
+ * @param latitude 纬度.
+ * @param longitude 经度.
+ *
+ */
++ (void)setLatitude:(double)latitude longitude:(double)longitude;
+
+/*!
+ * @abstract 地理位置上报
+ *
+ * @param location 直接传递 CLLocation * 型的地理信息
+ *
+ * @discussion 需要链接 CoreLocation.framework 并且 #import <CoreLocation/CoreLocation.h>
+ */
++ (void)setLocation:(CLLocation *)location;
+
+/**
+ 设置地理围栏的最大个数
+ 默认值为 10 ，iOS系统默认地理围栏最大个数为20
+ @param count 个数 count
+ */
++ (void)setGeofenecMaxCount:(NSInteger)count;
+/**
+ 注册地理围栏的代理
+
+ @param delegate 代理
+ @param launchOptions app启动完成是收到的字段参数
+ */
++ (void)registerLbsGeofenceDelegate:(id<MTPushGeofenceDelegate>)delegate withLaunchOptions:(NSDictionary *)launchOptions;
+
+/**
+ 删除地理围栏
+ 
+ @param geofenceId 地理围栏id
+ */
++ (void)removeGeofenceWithIdentifier:(NSString *)geofenceId;
 
 ///----------------------------------------------------
 /// @name Local Notification 本地通知
@@ -347,6 +513,9 @@ typedef NS_ENUM(NSUInteger, MTPushAuthorizationStatus) {
  */
 + (void)setLogOFF;
 
+//设置LBS 上报频率
++ (void)setLbsFrequency:(NSTimeInterval)frequency;
+
 /**
  * 设置设备语言（最好在注册成功之后再上报）
  * @param language 语言类型
@@ -394,3 +563,24 @@ typedef NS_ENUM(NSUInteger, MTPushAuthorizationStatus) {
 
 @end
 
+@protocol MTPushGeofenceDelegate <NSObject>
+
+/**
+ 进入地理围栏区域
+ 
+ @param geofenceId 地理围栏id
+ @param userInfo 地理围栏触发时返回的信息
+ @param error 错误信息
+ */
+- (void)mtpGeofenceIdentifer:(NSString *)geofenceId didEnterRegion:(NSDictionary *)userInfo error:(NSError *)error;
+
+/**
+ 离开地理围栏区域
+ 
+ @param geofenceId 地理围栏id
+ @param userInfo 地理围栏触发时返回的信息
+ @param error 错误信息
+ */
+- (void)mtpGeofenceIdentifer:(NSString *)geofenceId didExitRegion:(NSDictionary *)userInfo error:(NSError *)error;
+
+@end

@@ -30,7 +30,7 @@ MTPushEngagelab.prototype.callNative = function (
     errorCallback
 ) {
     if (errorCallback) {
-        cordova.exec(successCallback, errorCallback, "MTPushEngagelab", name, args);
+        cordova.exec(successCallback, errorCallback, "MTPushEngagelab", "channelMTPushEngagelab", [name, args]);
     } else {
         cordova.exec(
             successCallback,
@@ -337,6 +337,101 @@ MTPushEngagelab.prototype.uploadPlatformTokenAndroid = function (platform, token
     console.log("uploadPlatformToken");
     this.callNative("uploadPlatformToken", [platform, token, region], null);
 }
+
+/**
+ * 新增标签。
+ *
+ * @param params = { 'sequence': number, 'tags': ['tag1', 'tag2'] }
+ */
+MTPushEngagelab.prototype.addTags = function(params) {
+    console.log("addTags");
+    this.callNative("addTags", [params], null);
+};
+
+/**
+ * 删除标签。
+ *
+ * @param params = { 'sequence': number, 'tags': ['tag1', 'tag2'] }
+ */
+MTPushEngagelab.prototype.deleteTags = function(params) {
+    console.log("deleteTags");
+    this.callNative("deleteTags", [params], null);
+};
+
+/**
+ * 更新标签。ios setTags
+ *
+ * @param params = { 'sequence': number, 'tags': ['tag1', 'tag2'] }
+ */
+MTPushEngagelab.prototype.updateTags = function(params) {
+    console.log("updateTags");
+    this.callNative("updateTags", [params], null);
+};
+
+
+/**
+ * 查询标签。 ios为校验validTag
+ *
+ * @param params = { 'sequence': number, 'tag': 'tag1' }
+ */
+MTPushEngagelab.prototype.queryTag = function(params) {
+    console.log("queryTag");
+    this.callNative("queryTag", [params], null);
+};
+
+/**
+ * 删除所有标签。
+ *
+ * @param sequence = number
+ */
+MTPushEngagelab.prototype.deleteAllTag = function(sequence) {
+    console.log("deleteAllTag");
+    this.callNative("deleteAllTag", [sequence], null);
+};
+
+
+
+/**
+ * 查询所有标签。
+ *
+ * @param sequence = number
+ */
+MTPushEngagelab.prototype.queryAllTag = function(sequence) {
+    console.log("queryAllTag");
+    this.callNative("queryAllTag", [sequence], null);
+};
+
+
+/**
+ * 设置别名。
+ *
+ * @param sequence = number
+ * @param alias = string
+ */
+MTPushEngagelab.prototype.setAlias = function(sequence,alias) {
+    console.log("setAlias");
+    this.callNative("setAlias", [sequence,alias], null);
+};
+
+/**
+ * 获取别名。
+ *
+ * @param sequence = number
+ */
+MTPushEngagelab.prototype.getAlias = function(sequence) {
+    console.log("getAlias");
+    this.callNative("getAlias", [sequence], null);
+};
+
+/**
+ * 清除别名。
+ *
+ * @param sequence = number
+ */
+MTPushEngagelab.prototype.clearAlias = function(sequence) {
+    console.log("clearAlias");
+    this.callNative("clearAlias", [sequence], null);
+};
 
 
 if (!window.plugins) {

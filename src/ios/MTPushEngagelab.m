@@ -50,15 +50,33 @@ static MTPushEngagelab *SharedJPushPlugin;
         [self resetBadge];
     }else if ([name isEqualToString:(@"configDebugMode")]){
         [self setDebugMode:data];
+    }else if ([name isEqualToString:(@"addTags")]){
+        [self addTags:data];
+    }else if ([name isEqualToString:(@"deleteTags")]){
+        [self deleteTags:data];
+    }else if ([name isEqualToString:(@"deleteAllTag")]){
+        [self cleanTags:data];
+    }else if ([name isEqualToString:(@"queryAllTag")]){
+        [self getAllTags:data];
+    }else if ([name isEqualToString:(@"queryTag")]){
+        [self validTag:data];
+    }else if ([name isEqualToString:(@"setAlias")]){
+        [self setAlias:data];
+    }else if ([name isEqualToString:(@"getAlias")]){
+        [self getAlias:data];
+    }else if ([name isEqualToString:(@"clearAlias")]){
+        [self deleteAlias:data];
+    }else if ([name isEqualToString:(@"updateTags")]){
+        [self setTags:data];
     }
 
-//    if (name != nil && [name length] > 0) {
-//        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:name];
-//    } else {
-//        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
-//    }
-//
-//    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    //    if (name != nil && [name length] > 0) {
+    //        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:name];
+    //    } else {
+    //        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
+    //    }
+    //
+    //    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
 
@@ -87,23 +105,23 @@ static MTPushEngagelab *SharedJPushPlugin;
 
     __block NSString *advertisingId = nil;
     if(isIDFA.boolValue) {
-          if (@available(iOS 14, *)) {
-              //设置Info.plist中 NSUserTrackingUsageDescription 需要广告追踪权限，用来定位唯一用户标识
-              [ATTrackingManager requestTrackingAuthorizationWithCompletionHandler:^(ATTrackingManagerAuthorizationStatus status) {
-                  if (status == ATTrackingManagerAuthorizationStatusAuthorized) {
+        if (@available(iOS 14, *)) {
+            //设置Info.plist中 NSUserTrackingUsageDescription 需要广告追踪权限，用来定位唯一用户标识
+            [ATTrackingManager requestTrackingAuthorizationWithCompletionHandler:^(ATTrackingManagerAuthorizationStatus status) {
+                if (status == ATTrackingManagerAuthorizationStatusAuthorized) {
                     advertisingId = [[ASIdentifierManager sharedManager] advertisingIdentifier].UUIDString;
-                  }
-              }];
-          } else {
-              // 使用原方式访问 IDFA
+                }
+            }];
+        } else {
+            // 使用原方式访问 IDFA
             advertisingId = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
-          }
+        }
     }
     [MTPushService setupWithOption:launchOptions
-                           appKey:appkey
-                          channel:channel
-                 apsForProduction:[isProduction boolValue]
-            advertisingIdentifier:advertisingId];
+                            appKey:appkey
+                           channel:channel
+                  apsForProduction:[isProduction boolValue]
+             advertisingIdentifier:advertisingId];
 }
 
 
@@ -122,7 +140,8 @@ static MTPushEngagelab *SharedJPushPlugin;
 }
 
 -(void)setBadge:(NSArray* )data {
-    int value = [data objectAtIndex:0];
+    int value = [[data objectAtIndex:0] intValue];
+    [UIApplication sharedApplication].applicationIconBadgeNumber = value;
     [MTPushService setBadge:value];
 }
 
@@ -138,6 +157,131 @@ static MTPushEngagelab *SharedJPushPlugin;
         [MTPushService setDebugMode];
     }
 }
+
+
+-(void)setTags:(NSArray* )data {
+    NSDictionary* params = [data objectAtIndex:0];
+    NSNumber* sequence = params[@"sequence"];
+    NSArray* tags = params[@"tags"];
+
+    [MTPushService setTags:[NSSet setWithArray:tags] completion:^(NSInteger iResCode, NSSet *iTags, NSInteger seq) {
+            [MTPushEngagelab tagsCallBackChannel:(@"setTags") iResCode:(iResCode) iTags:(iTags) seq:(seq)];
+        } seq:([sequence intValue])];
+
+}
+
+
+-(void)addTags:(NSArray* )data {
+    NSDictionary* params = [data objectAtIndex:0];
+    NSNumber* sequence = params[@"sequence"];
+    NSArray* tags = params[@"tags"];
+
+    [MTPushService addTags:[NSSet setWithArray:tags] completion:^(NSInteger iResCode, NSSet *iTags, NSInteger seq) {
+            [MTPushEngagelab tagsCallBackChannel:(@"addTags") iResCode:(iResCode) iTags:(iTags) seq:(seq)];
+        } seq:([sequence intValue])];
+
+}
+
+
+-(void)deleteTags:(NSArray* )data {
+    NSDictionary* params = [data objectAtIndex:0];
+    NSNumber* sequence = params[@"sequence"];
+    NSArray* tags = params[@"tags"];
+
+    [MTPushService deleteTags:[NSSet setWithArray:tags] completion:^(NSInteger iResCode, NSSet *iTags, NSInteger seq) {
+            [MTPushEngagelab tagsCallBackChannel:(@"deleteTags") iResCode:(iResCode) iTags:(iTags) seq:(seq)];
+        } seq:([sequence intValue])];
+
+}
+
+
+-(void)cleanTags:(NSArray* )data {
+    NSDictionary* params = [data objectAtIndex:0];
+    NSNumber* sequence = params[@"sequence"];
+
+    [MTPushService cleanTags:^(NSInteger iResCode, NSSet *iTags, NSInteger seq) {
+            [MTPushEngagelab tagsCallBackChannel:(@"cleanTags") iResCode:(iResCode) iTags:(iTags) seq:(seq)];
+        } seq:([sequence intValue])];
+
+}
+
+
+-(void)getAllTags:(NSArray* )data {
+    NSDictionary* params = [data objectAtIndex:0];
+    NSNumber* sequence = params[@"sequence"];
+
+    [MTPushService getAllTags:^(NSInteger iResCode, NSSet *iTags, NSInteger seq) {
+            [MTPushEngagelab tagsCallBackChannel:(@"getAllTags") iResCode:(iResCode) iTags:(iTags) seq:(seq)];
+        } seq:([sequence intValue])];
+
+}
+
+
+
+-(void)validTag:(NSArray* )data {
+    NSDictionary* params = [data objectAtIndex:0];
+    NSNumber* sequence = params[@"sequence"];
+    NSString* tag = params[@"tag"];
+    [MTPushService validTag:tag completion:^(NSInteger iResCode, NSSet *iTags, NSInteger seq, BOOL isBind) {
+            NSMutableDictionary *data = @{}.mutableCopy;
+                    data[@"code"] = @(iResCode);//[NSNumber numberWithInteger:iResCode];
+                    data[@"sequence"] = @(seq);
+                    if (iResCode == 0) {
+                        data[@"tags"] = [iTags allObjects];
+                        [data setObject:[NSNumber numberWithBool:isBind] forKey:@"isBind"];
+                    }
+        [MTPushEngagelab fireDocumentEvent:@"validTag" jsString:[data toJsonString]];
+    } seq:([sequence intValue])];
+}
+
+
+-(void)setAlias:(NSArray* )data {
+    NSNumber* sequence = [data objectAtIndex:0];
+    NSString* alias = [data objectAtIndex:1];
+    [MTPushService setAlias:alias completion:^(NSInteger iResCode, NSString *iAlias, NSInteger seq) {
+                    [MTPushEngagelab aliasCallBackChannel:(@"setAlias") iResCode:(iResCode) iAlias:(iAlias) seq:(seq)];
+    } seq:([sequence intValue])];
+}
+
+
+-(void)deleteAlias:(NSArray* )data {
+   NSNumber* sequence = [data objectAtIndex:0];
+    [MTPushService deleteAlias:^(NSInteger iResCode, NSString *iAlias, NSInteger seq) {
+                    [MTPushEngagelab aliasCallBackChannel:(@"deleteAlias") iResCode:(iResCode) iAlias:(iAlias) seq:(seq)];
+    } seq:([sequence intValue])];
+}
+
+
+-(void)getAlias:(NSArray* )data {
+    NSNumber* sequence = [data objectAtIndex:0];
+    [MTPushService getAlias:^(NSInteger iResCode, NSString *iAlias, NSInteger seq) {
+                    [MTPushEngagelab aliasCallBackChannel:(@"getAlias") iResCode:(iResCode) iAlias:(iAlias) seq:(seq)];
+    } seq:([sequence intValue])];
+}
+
+
++(void)tagsCallBackChannel:(NSString*)eventName iResCode:(NSInteger)iResCode iTags:(NSSet*)iTags seq:(NSInteger)seq{
+    NSMutableDictionary *data = @{}.mutableCopy;
+    data[@"code"] = @(iResCode);//[NSNumber numberWithInteger:iResCode];
+    data[@"sequence"] = @(seq);
+    if (iResCode == 0) {
+        data[@"tags"] = [iTags allObjects];
+    }
+    [MTPushEngagelab fireDocumentEvent:eventName jsString:[data toJsonString]];
+};
+
+
++(void)aliasCallBackChannel:(NSString*)eventName iResCode:(NSInteger)iResCode iAlias:(NSString*)iAlias seq:(NSInteger)seq {
+    NSMutableDictionary* dic = [[NSMutableDictionary alloc] init];
+            [dic setObject:[NSNumber numberWithInteger:seq] forKey:@"sequence"];
+            [dic setValue:[NSNumber numberWithUnsignedInteger:iResCode] forKey:@"code"];
+
+            if (iResCode == 0) {
+                [dic setObject:iAlias forKey:@"alias"];
+            }
+        [MTPushEngagelab fireDocumentEvent:eventName jsString:[dic toJsonString]];
+
+};
 
 #ifdef __CORDOVA_4_0_0
 
@@ -164,6 +308,8 @@ static MTPushEngagelab *SharedJPushPlugin;
     }
 }
 
+
+
 +(void)fireDocumentEvent:(NSString*)eventName jsString:(NSString*)jsString{
     NSMutableDictionary *data = @{}.mutableCopy;
     data[@"event_name"] = eventName;
@@ -171,15 +317,15 @@ static MTPushEngagelab *SharedJPushPlugin;
 
     NSString *toC = [data toJsonString];
     NSLog(@"toC：%@",toC);
-  if (SharedJPushPlugin) {
-    dispatch_async(dispatch_get_main_queue(), ^{
+    if (SharedJPushPlugin) {
+        dispatch_async(dispatch_get_main_queue(), ^{
 
-//      [SharedJPushPlugin.commandDelegate evalJs:[NSString stringWithFormat:@"cordova.fireDocumentEvent('MTPushEngagelab.onMTCommonReceiver',%@)", toC]];
-        [SharedJPushPlugin.commandDelegate evalJs:[NSString stringWithFormat:@"window.plugins.mTPushEngagelab.onMTCommonReceiver(%@);", toC]];
+            //      [SharedJPushPlugin.commandDelegate evalJs:[NSString stringWithFormat:@"cordova.fireDocumentEvent('MTPushEngagelab.onMTCommonReceiver',%@)", toC]];
+            [SharedJPushPlugin.commandDelegate evalJs:[NSString stringWithFormat:@"window.plugins.mTPushEngagelab.onMTCommonReceiver(%@);", toC]];
 
-    });
-    return;
-  }
+        });
+        return;
+    }
 
 
 }

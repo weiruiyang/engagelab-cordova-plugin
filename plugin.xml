@@ -452,6 +452,7 @@
         <lib-file src="src/android/libs/pushOpenClient_v3.0.0.4_484_81c1f83_release.jar"/>
         <lib-file src="src/android/libs/vivo_pushSDK_v3.0.0.4_484.jar"/>
 
+        <source-file src="src/android/MsgToJson.java" target-dir="src/com/engagelab/push"/>
         <source-file src="src/android/MTPushEngagelab.java" target-dir="src/com/engagelab/push"/>
         <source-file src="src/android/UserReceiver.java" target-dir="src/com/engagelab/push"/>
         <source-file src="src/android/UserService.java" target-dir="src/com/engagelab/push"/>
@@ -486,7 +487,7 @@
         <source-file src="src/ios/AppDelegate+MTPush.m"/>
 
         <header-file src="src/ios/lib/MTPushService.h"/>
-        <source-file src="src/ios/lib/mtpush-ios-3.0.0.a" framework="true"/>
+        <source-file src="src/ios/lib/mtpush-ios-private-3.0.0.a" framework="true"/>
         <resource-file src="src/ios/MTPushConfig.plist" />
 
         <framework src="CFNetwork.framework" weak="true" />

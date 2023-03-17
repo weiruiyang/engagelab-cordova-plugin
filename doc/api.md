@@ -17,10 +17,21 @@
       - "onNotificationDeleted":通知消息删除回调，内容为通知消息体
       - "onCustomMessage":自定义消息回调，内容为通知消息体
       - "onPlatformToken":厂商token消息回调，内容为厂商token消息体
+      - "onTagMessage":tag操作回调
+      - "onAliasMessage":alias操作回调
     - ios:
       - "willPresentNotification":通知消息到达回调，内容为通知消息体
       - "didReceiveNotificationResponse":通知消息点击回调，内容为通知消息体
       - "networkDidReceiveMessage":自定义消息回调，内容为通知消息体
+      - "setTags":updateTags接口操作回调
+      - "addTags":addTags接口操作回调
+      - "deleteTags":deleteTags接口操作回调
+      - "cleanTags":deleteAllTag接口操作回调
+      - "getAllTags":queryAllTag接口操作回调
+      - "validTag":queryTag接口操作回调
+      - "setAlias":setAlias接口操作回调
+      - "deleteAlias":clearAlias接口操作回调
+      - "getAlias":getAlias接口操作回调
   - dataAll.event_data: 为对应内容
 
 

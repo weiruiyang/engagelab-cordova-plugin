@@ -103,3 +103,4 @@ window.cordova.plugins.MTPushEngagelab.getRegistrationId(function(rId) {
   console.log("MTPushEngagelab:registrationID is " + rId)
 })
 ```
+- [其他Api请看MTPushEngagelab.js文件](../www/MTPushEngagelab.js)

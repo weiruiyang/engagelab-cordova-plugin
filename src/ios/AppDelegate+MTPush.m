@@ -4,6 +4,7 @@
 #import "MTPushService.h"
 #import <objc/runtime.h>
 #import <AdSupport/AdSupport.h>
+#import <AppTrackingTransparency/AppTrackingTransparency.h>
 #import <UserNotifications/UserNotifications.h>
 #import "MTPushEngagelab.h"
 

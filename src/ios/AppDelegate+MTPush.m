@@ -55,8 +55,50 @@ static void *strKey = &strKey;
       [MTPushService registerForRemoteNotificationConfig:entity delegate:self];
 
 
-    // 检测通知授权情况。可选项，不一定要放在此处，可以运行一定时间后再调用
-    [self performSelector:@selector(checkNotificationAuthorization) withObject:nil afterDelay:10];
+NSDictionary *launchOptions = AppDelegate.launchOptions;
+
+    static NSString *const JPushConfig_FileName     = @"MTPushConfig";
+    static NSString *const JPushConfig_Appkey       = @"Appkey";
+    static NSString *const JPushConfig_Channel      = @"Channel";
+    static NSString *const JPushConfig_IsProduction = @"IsProduction";
+    static NSString *const JPushConfig_IsIDFA       = @"IsIDFA";
+    static NSString *const JPushConfig_Delay        = @"Delay";
+
+    NSString *plistPath = [[NSBundle mainBundle] pathForResource:JPushConfig_FileName ofType:@"plist"];
+    if (plistPath == nil) {
+        NSLog(@"error: PushConfig.plist not found");
+        assert(0);
+    }
+
+    NSMutableDictionary *plistData = [[NSMutableDictionary alloc] initWithContentsOfFile:plistPath];
+    NSString *appkey       = [plistData valueForKey:JPushConfig_Appkey];
+    NSString *channel      = [plistData valueForKey:JPushConfig_Channel];
+    NSNumber *isProduction = [plistData valueForKey:JPushConfig_IsProduction];
+    NSNumber *isIDFA       = [plistData valueForKey:JPushConfig_IsIDFA];
+
+    __block NSString *advertisingId = nil;
+    if(isIDFA.boolValue) {
+        if (@available(iOS 14, *)) {
+            //设置Info.plist中 NSUserTrackingUsageDescription 需要广告追踪权限，用来定位唯一用户标识
+            [ATTrackingManager requestTrackingAuthorizationWithCompletionHandler:^(ATTrackingManagerAuthorizationStatus status) {
+                if (status == ATTrackingManagerAuthorizationStatusAuthorized) {
+                    advertisingId = [[ASIdentifierManager sharedManager] advertisingIdentifier].UUIDString;
+                }
+            }];
+        } else {
+            // 使用原方式访问 IDFA
+            advertisingId = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
+        }
+    }
+    [MTPushService setupWithOption:launchOptions
+                            appKey:appkey
+                           channel:channel
+                  apsForProduction:[isProduction boolValue]
+             advertisingIdentifier:advertisingId];
+
+
+//     // 检测通知授权情况。可选项，不一定要放在此处，可以运行一定时间后再调用
+//     [self performSelector:@selector(checkNotificationAuthorization) withObject:nil afterDelay:10];
 
 
 NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];

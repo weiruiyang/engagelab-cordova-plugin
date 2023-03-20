@@ -302,13 +302,27 @@ static MTPushEngagelab *SharedJPushPlugin;
 
 #endif
 
+static NSMutableArray *_eventCache;
+
 -(void)initPlugin{
     if (!SharedJPushPlugin) {
         SharedJPushPlugin = self;
     }
+    [self eventCacheCallBackChannel];
 }
 
+-(void) eventCacheCallBackChannel {
 
+    NSLog(@"### eventCacheCallBackChannel ");
+    if (nil != _eventCache) {
+        NSLog(@"### eventCacheCallBackChannel _eventCache");
+        for (NSMutableDictionary *data in _eventCache) {
+            [MTPushEngagelab fireDocumentEvent:data[@"event_name"] jsString:data[@"event_data"]];
+        }
+        NSLog(@"eventCacheCallBackChannel");
+        [_eventCache removeAllObjects];
+    }
+}
 
 +(void)fireDocumentEvent:(NSString*)eventName jsString:(NSString*)jsString{
     NSMutableDictionary *data = @{}.mutableCopy;
@@ -325,6 +339,13 @@ static MTPushEngagelab *SharedJPushPlugin;
 
         });
         return;
+    } else{
+             if (nil == _eventCache) {
+                 _eventCache =  [[NSMutableArray alloc] init];
+             }
+             NSLog(@"toCache00：%@",data);
+             [_eventCache addObject:data];
+             NSLog(@"toCache11：%@",data);
     }
 
 

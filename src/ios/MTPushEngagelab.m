@@ -226,7 +226,7 @@ static MTPushEngagelab *SharedJPushPlugin;
             NSMutableDictionary *data = @{}.mutableCopy;
                     data[@"code"] = @(iResCode);//[NSNumber numberWithInteger:iResCode];
                     data[@"sequence"] = @(seq);
-                    if (iResCode == 0) {
+                    if (iResCode == 0 && nil != iTags) {
                         data[@"tags"] = [iTags allObjects];
                         [data setObject:[NSNumber numberWithBool:isBind] forKey:@"isBind"];
                     }
@@ -264,7 +264,7 @@ static MTPushEngagelab *SharedJPushPlugin;
     NSMutableDictionary *data = @{}.mutableCopy;
     data[@"code"] = @(iResCode);//[NSNumber numberWithInteger:iResCode];
     data[@"sequence"] = @(seq);
-    if (iResCode == 0) {
+    if (iResCode == 0 && nil != iTags) {
         data[@"tags"] = [iTags allObjects];
     }
     [MTPushEngagelab fireDocumentEvent:eventName jsString:[data toJsonString]];

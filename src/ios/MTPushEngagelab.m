@@ -276,7 +276,7 @@ static MTPushEngagelab *SharedJPushPlugin;
             [dic setObject:[NSNumber numberWithInteger:seq] forKey:@"sequence"];
             [dic setValue:[NSNumber numberWithUnsignedInteger:iResCode] forKey:@"code"];
 
-            if (iResCode == 0) {
+            if (iResCode == 0 && nil != iAlias) {
                 [dic setObject:iAlias forKey:@"alias"];
             }
         [MTPushEngagelab fireDocumentEvent:eventName jsString:[dic toJsonString]];

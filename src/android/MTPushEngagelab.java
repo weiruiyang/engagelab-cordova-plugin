@@ -662,7 +662,7 @@ public class MTPushEngagelab extends CordovaPlugin {
     }
 
 
-    void addTag(JSONArray data, CallbackContext callbackContext) {
+    void addTags(JSONArray data, CallbackContext callbackContext) {
         int sequence = -1;
         Set<String> tags = new HashSet<String>();
 
@@ -684,7 +684,7 @@ public class MTPushEngagelab extends CordovaPlugin {
         MTPushPrivatesApi.addTag(getApplicationContext(), sequence, toArray);
     }
 
-    void deleteTag(JSONArray data, CallbackContext callbackContext) {
+    void deleteTags(JSONArray data, CallbackContext callbackContext) {
         int sequence = -1;
         Set<String> tags = new HashSet<String>();
 
@@ -706,7 +706,7 @@ public class MTPushEngagelab extends CordovaPlugin {
         MTPushPrivatesApi.deleteTag(getApplicationContext(), sequence, toArray);
     }
 
-    void updateTag(JSONArray data, CallbackContext callbackContext) {
+    void updateTags(JSONArray data, CallbackContext callbackContext) {
         int sequence = -1;
         Set<String> tags = new HashSet<String>();
 

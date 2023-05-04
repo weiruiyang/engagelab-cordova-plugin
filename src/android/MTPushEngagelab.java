@@ -25,6 +25,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Method;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -656,6 +658,143 @@ public class MTPushEngagelab extends CordovaPlugin {
             MTPushPrivatesApi.uploadPlatformToken(context, platform, token, region);
         } catch (Throwable e) {
             e.printStackTrace();
+        }
+    }
+
+
+    void addTags(JSONArray data, CallbackContext callbackContext) {
+        int sequence = -1;
+        Set<String> tags = new HashSet<String>();
+
+        try {
+            JSONObject params = data.getJSONObject(0);
+            sequence = params.getInt("sequence");
+
+            JSONArray tagsArr = params.getJSONArray("tags");
+            for (int i = 0; i < tagsArr.length(); i++) {
+                tags.add(tagsArr.getString(i));
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            callbackContext.error("Parameters error.");
+            return;
+        }
+        String[] toArray = tags.toArray(new String[tags.size()]);
+        MTPushPrivatesApi.addTag(getApplicationContext(), sequence, toArray);
+    }
+
+    void deleteTags(JSONArray data, CallbackContext callbackContext) {
+        int sequence = -1;
+        Set<String> tags = new HashSet<String>();
+
+        try {
+            JSONObject params = data.getJSONObject(0);
+            sequence = params.getInt("sequence");
+
+            JSONArray tagsArr = params.getJSONArray("tags");
+            for (int i = 0; i < tagsArr.length(); i++) {
+                tags.add(tagsArr.getString(i));
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            callbackContext.error("Parameters error.");
+            return;
+        }
+        String[] toArray = tags.toArray(new String[tags.size()]);
+        MTPushPrivatesApi.deleteTag(getApplicationContext(), sequence, toArray);
+    }
+
+    void updateTags(JSONArray data, CallbackContext callbackContext) {
+        int sequence = -1;
+        Set<String> tags = new HashSet<String>();
+
+        try {
+            JSONObject params = data.getJSONObject(0);
+            sequence = params.getInt("sequence");
+
+            JSONArray tagsArr = params.getJSONArray("tags");
+            for (int i = 0; i < tagsArr.length(); i++) {
+                tags.add(tagsArr.getString(i));
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            callbackContext.error("Parameters error.");
+            return;
+        }
+        String[] toArray = tags.toArray(new String[tags.size()]);
+        MTPushPrivatesApi.updateTag(getApplicationContext(), sequence, toArray);
+    }
+
+    void queryTag(JSONArray data, CallbackContext callbackContext) {
+
+        int sequence = -1;
+        String tag = "";
+
+        try {
+            JSONObject params = data.getJSONObject(0);
+            sequence = params.getInt("sequence");
+            tag = params.getString("tag");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            callbackContext.error("Parameters error.");
+            return;
+        }
+        MTPushPrivatesApi.queryTag(getApplicationContext(), sequence, tag);
+    }
+
+    void deleteAllTag(JSONArray data, CallbackContext callbackContext) {
+        try {
+            int sequence = data.getInt(0);
+            MTPushPrivatesApi.deleteAllTag(getApplicationContext(), sequence);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            callbackContext.error("Parameters error.");
+        }
+    }
+
+    void queryAllTag(JSONArray data, CallbackContext callbackContext) {
+        try {
+            int sequence = data.getInt(0);
+            MTPushPrivatesApi.queryAllTag(getApplicationContext(), sequence);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            callbackContext.error("Parameters error.");
+        }
+    }
+
+    void setAlias(JSONArray data, CallbackContext callbackContext) {
+
+        try {
+            int sequence = data.getInt(0);
+            String alias = data.getString(1);
+            MTPushPrivatesApi.setAlias(getApplicationContext(), sequence, alias);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            callbackContext.error("Parameters error.");
+        }
+    }
+
+    void getAlias(JSONArray data, CallbackContext callbackContext) {
+        try {
+            int sequence = data.getInt(0);
+            MTPushPrivatesApi.getAlias(getApplicationContext(), sequence);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            callbackContext.error("Parameters error.");
+        }
+    }
+
+    void clearAlias(JSONArray data, CallbackContext callbackContext) {
+        try {
+            int sequence = data.getInt(0);
+            MTPushPrivatesApi.clearAlias(getApplicationContext(), sequence);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            callbackContext.error("Parameters error.");
         }
     }
 

@@ -55,14 +55,14 @@ NSData * myDeviceToken;
         //    }
     }
     [MTPushService registerForRemoteNotificationConfig:entity delegate:[MTPushEngagelabDelegate shareSingleton]];
-    
-    
+
+
     // 检测通知授权情况。可选项，不一定要放在此处，可以运行一定时间后再调用
     //    [self performSelector:@selector(checkNotificationAuthorization) withObject:nil afterDelay:10];
-    
+
     [[MTPushEngagelabSelector shareSingleton] initSelector];
     myLaunchOptions = notification.userInfo;
-    
+
 }
 
 
@@ -84,7 +84,7 @@ NSData * myDeviceToken;
     CDVPluginResult* pluginResult = nil;
     NSString* name = [command.arguments objectAtIndex:0];
     NSArray* data = [command.arguments objectAtIndex:1];
-    
+
     if ([name isEqualToString:(@"init")]) {
         [self initSdk];
     }else if ([name isEqualToString:(@"getRegistrationId")]){
@@ -113,8 +113,10 @@ NSData * myDeviceToken;
         [self deleteAlias:data];
     }else if ([name isEqualToString:(@"updateTags")]){
         [self setTags:data];
+    }else if ([name isEqualToString:(@"setTcpSSL")]){
+        [self setTcpSSL:data];
     }
-    
+
     //    if (name != nil && [name length] > 0) {
     //        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:name];
     //    } else {
@@ -125,27 +127,27 @@ NSData * myDeviceToken;
 }
 
 -(void)initSdk{
-    
-    
+
+
     static NSString *const JPushConfig_FileName     = @"MTPushConfig";
     static NSString *const JPushConfig_Appkey       = @"Appkey";
     static NSString *const JPushConfig_Channel      = @"Channel";
     static NSString *const JPushConfig_IsProduction = @"IsProduction";
     static NSString *const JPushConfig_IsIDFA       = @"IsIDFA";
     static NSString *const JPushConfig_Delay        = @"Delay";
-    
+
     NSString *plistPath = [[NSBundle mainBundle] pathForResource:JPushConfig_FileName ofType:@"plist"];
     if (plistPath == nil) {
         MYLog(@"error: PushConfig.plist not found");
         assert(0);
     }
-    
+
     NSMutableDictionary *plistData = [[NSMutableDictionary alloc] initWithContentsOfFile:plistPath];
     NSString *appkey       = [plistData valueForKey:JPushConfig_Appkey];
     NSString *channel      = [plistData valueForKey:JPushConfig_Channel];
     NSNumber *isProduction = [plistData valueForKey:JPushConfig_IsProduction];
     NSNumber *isIDFA       = [plistData valueForKey:JPushConfig_IsIDFA];
-    
+
     __block NSString *advertisingId = nil;
     if(isIDFA.boolValue) {
         if (@available(iOS 14, *)) {
@@ -165,8 +167,8 @@ NSData * myDeviceToken;
                            channel:channel
                   apsForProduction:[isProduction boolValue]
              advertisingIdentifier:advertisingId];
-    
-    
+
+
     [MTPushService registerDeviceToken:myDeviceToken];
 }
 
@@ -182,7 +184,7 @@ NSData * myDeviceToken;
         }
         [MTPushEngagelabChannels sendPluginResult:result callbackId:command.callbackId];
     }];
-    
+
 }
 
 -(void)setBadge:(NSArray* )data {
@@ -204,6 +206,11 @@ NSData * myDeviceToken;
     }
 }
 
+-(void)setTcpSSL:(NSArray* )data {
+    bool value = [data objectAtIndex:0];
+    [MTPushService setTcpSSL:value];
+}
+
 -(void)setTags:(NSArray* )data {
 //    NSDictionary* params = [data objectAtIndex:0];
 //    NSNumber* sequence = params[@"sequence"];
@@ -212,7 +219,7 @@ NSData * myDeviceToken;
 //    [MTPushService setTags:[NSSet setWithArray:tags] completion:^(NSInteger iResCode, NSSet *iTags, NSInteger seq) {
 //        [MTPushEngagelabApi tagsCallBackChannel:(@"setTags") iResCode:(iResCode) iTags:(iTags) seq:(seq)];
 //    } seq:([sequence intValue])];
-    
+
 }
 
 
@@ -235,7 +242,7 @@ NSData * myDeviceToken;
 //    [MTPushService deleteTags:[NSSet setWithArray:tags] completion:^(NSInteger iResCode, NSSet *iTags, NSInteger seq) {
 //        [MTPushEngagelabApi tagsCallBackChannel:(@"deleteTags") iResCode:(iResCode) iTags:(iTags) seq:(seq)];
 //    } seq:([sequence intValue])];
-    
+
 }
 
 
@@ -246,7 +253,7 @@ NSData * myDeviceToken;
 //    [MTPushService cleanTags:^(NSInteger iResCode, NSSet *iTags, NSInteger seq) {
 //        [MTPushEngagelabApi tagsCallBackChannel:(@"cleanTags") iResCode:(iResCode) iTags:(iTags) seq:(seq)];
 //    } seq:([sequence intValue])];
-    
+
 }
 
 
@@ -257,7 +264,7 @@ NSData * myDeviceToken;
 //    [MTPushService getAllTags:^(NSInteger iResCode, NSSet *iTags, NSInteger seq) {
 //        [MTPushEngagelabApi tagsCallBackChannel:(@"getAllTags") iResCode:(iResCode) iTags:(iTags) seq:(seq)];
 //    } seq:([sequence intValue])];
-    
+
 }
 
 
@@ -319,12 +326,12 @@ NSData * myDeviceToken;
     NSMutableDictionary* dic = [[NSMutableDictionary alloc] init];
     [dic setObject:[NSNumber numberWithInteger:seq] forKey:@"sequence"];
     [dic setValue:[NSNumber numberWithUnsignedInteger:iResCode] forKey:@"code"];
-    
+
     if (iResCode == 0 && nil != iAlias) {
         [dic setObject:iAlias forKey:@"alias"];
     }
     [MTPushEngagelabChannels fireDocumentEvent:eventName jsString:[dic toJsonString]];
-    
+
 };
 
 

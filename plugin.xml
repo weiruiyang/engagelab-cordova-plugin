@@ -480,6 +480,23 @@
             <string>production</string>
         </config-file>
 
+        <header-file src="src/ios/MTPushEngagelabApi.h"/>
+        <source-file src="src/ios/MTPushEngagelabApi.m"/>
+
+
+        <header-file src="src/ios/MTPushEngagelabSelector.h"/>
+        <source-file src="src/ios/MTPushEngagelabSelector.m"/>
+
+
+        <header-file src="src/ios/MTPushEngagelabChannels.h"/>
+        <source-file src="src/ios/MTPushEngagelabChannels.m"/>
+
+        <header-file src="src/ios/MTPushEngagelabDelegate.h"/>
+        <source-file src="src/ios/MTPushEngagelabDelegate.m"/>
+
+        <header-file src="src/ios/MTPushEngagelabUtils.h"/>
+        <source-file src="src/ios/MTPushEngagelabUtils.m"/>
+
         <header-file src="src/ios/MTPushEngagelab.h"/>
         <source-file src="src/ios/MTPushEngagelab.m"/>
 
@@ -487,7 +504,7 @@
         <source-file src="src/ios/AppDelegate+MTPush.m"/>
 
         <header-file src="src/ios/lib/MTPushService.h"/>
-        <source-file src="src/ios/lib/mtpush-ios-3.0.0.a" framework="true"/>
+        <source-file src="src/ios/lib/mtpush-ios-3.3.0.a" framework="true"/>
         <resource-file src="src/ios/MTPushConfig.plist" />
 
         <framework src="CFNetwork.framework" weak="true" />

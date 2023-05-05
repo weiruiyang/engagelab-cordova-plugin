@@ -2,23 +2,14 @@ package com.engagelab.push;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.engagelab.privates.api.MTPrivatesApi;
-import com.engagelab.privates.common.global.MTGlobal;
 import com.engagelab.privates.core.api.MTCorePrivatesApi;
 import com.engagelab.privates.push.api.MTPushPrivatesApi;
-import com.engagelab.privates.push.api.NotificationMessage;
-import com.heytap.msp.push.HeytapPushManager;
 
+import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
-import org.apache.cordova.CallbackContext;
-
 import org.apache.cordova.CordovaWebView;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -166,6 +157,15 @@ public class MTPushEngagelab extends CordovaPlugin {
             Context context = getApplicationContext();
             boolean enable = data.getBoolean(0);
             MTCorePrivatesApi.configDebugMode(context, enable);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    void setTcpSSL(JSONArray data, CallbackContext callbackContext) {
+        try {
+            boolean enable = data.getBoolean(0);
+            MTCorePrivatesApi.setTcpSSl(enable);
         } catch (JSONException e) {
             e.printStackTrace();
         }

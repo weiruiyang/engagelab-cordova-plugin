@@ -1,13 +1,72 @@
 dependencies {
-    implementation(name: 'com.heytap.msp-push-3.1.0', ext: 'aar')
-    implementation 'com.google.firebase:firebase-messaging:23.0.8'
-    implementation 'com.huawei.hms:push:6.5.0.300'
+    //必须 主包
+    implementation 'com.engagelab:engagelab:3.4.0' // 此处以3.4.0 版本为例。
+    //可选，google厂商
+    implementation 'com.engagelab.plugin:google:3.4.0' // 此处以3.4.0 版本为例。
+    //可选，honor厂商
+    implementation 'com.engagelab.plugin:honor:3.4.0' // 此处以3.4.0 版本为例。
+    implementation 'com.engagelab.plugin:honor_th_push:3.4.0' // 此处以3.4.0 版本为例。
+    //可选，huawei厂商
+    implementation 'com.engagelab.plugin:huawei:3.4.0' // 此处以3.4.0 版本为例。
+    //可选，mi厂商，海外版
+    implementation 'com.engagelab.plugin:mi_global:3.4.0' // 此处以3.4.0 版本为例。
+    //可选，meizu厂商
+    implementation 'com.engagelab.plugin:meizu:3.4.0' // 此处以3.4.0 版本为例。
+    //可选，oppo厂商
+    implementation 'com.engagelab.plugin:oppo:3.4.0' // 此处以3.4.0 版本为例。
+    implementation 'com.engagelab.plugin:oppo_th_push:3.4.0' // 此处以3.4.0 版本为例。
+    //可选，vivo厂商
+    implementation 'com.engagelab.plugin:vivo:3.4.0' // 此处以3.4.0 版本为例。
+
+    // google push need，不需要 google 通道，则删除
+    implementation 'com.google.firebase:firebase-messaging:23.1.1'
+
+    // huawei push need，不需要 huawei 通道，则删除
+    implementation 'com.huawei.hms:push:6.7.0.300'
+    //oppo以下依赖都需要添加，不需要 oppo 通道，则删除
+    implementation 'com.google.code.gson:gson:2.6.2'
+    implementation 'commons-codec:commons-codec:1.6'
+    implementation 'androidx.annotation:annotation:1.1.0'
 }
 repositories {
     google()
     mavenCentral()
     maven { url 'https://developer.huawei.com/repo/' }
-    flatDir{
+    flatDir {
         dirs 'libs'
     }
 }
+
+
+//ext{
+//    def androidJsonFilePath = "$rootDir/android.json"
+//    def jsonFile = new File(androidJsonFilePath)
+//    androidJsonConfig = new groovy.json.JsonSlurper().parseText(jsonFile.text)
+//    println("androidJsonConfig:"+androidJsonConfig)
+//    installed_plugins = androidJsonConfig.installed_plugins
+//    println("installed_plugins:"+installed_plugins)
+//    mt_push_engagelab_plugin = installed_plugins."mt-push-engagelab-plugin"
+//    println("mt-push-engagelab-plugin:"+mt_push_engagelab_plugin)
+//    googleServicesPath = mt_push_engagelab_plugin.googleServicesPath
+//    agconnectServicesPath = mt_push_engagelab_plugin.agconnectServicesPath
+//
+//}
+
+//task copyJsonFile {
+//    println("googleServicesPath:"+googleServicesPath)
+//    copy {
+//        delete("google-services.json")
+//        from(googleServicesPath)
+//        into('./')
+//        include("google-services.json")
+//    }
+//
+//    println("agconnectServicesPath:"+agconnectServicesPath)
+//    copy {
+//        delete("agconnect-services.json")
+//        from(agconnectServicesPath)
+//        into('./')
+//        include("agconnect-services.json")
+//    }
+//}
+//preBuild.dependsOn copyJsonFile

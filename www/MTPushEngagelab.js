@@ -91,7 +91,6 @@ MTPushEngagelab.prototype.configDebugMode = function (enable) {
  * @param enable  设置tcp 是否使用ssl，true为使用ssl，false为不使用ssl
  */
 MTPushEngagelab.prototype.setTcpSSL = function (enable) {
-    MTPushEngagelab.debug = enable;
     console.log("setTcpSSL:" + enable);
     this.callNative("setTcpSSL", [enable], null);
 }

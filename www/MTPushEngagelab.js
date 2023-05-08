@@ -84,16 +84,6 @@ MTPushEngagelab.prototype.configDebugMode = function (enable) {
     this.callNative("configDebugMode", [enable], null);
 }
 
-/**
- * 设置tcp 是否使用ssl
- * <p>
- * 初始化前调用
- * @param enable  设置tcp 是否使用ssl，true为使用ssl，false为不使用ssl
- */
-MTPushEngagelab.prototype.setTcpSSL = function (enable) {
-    console.log("setTcpSSL:" + enable);
-    this.callNative("setTcpSSL", [enable], null);
-}
 
 /**
  * 配置使用国密加密
@@ -349,6 +339,24 @@ MTPushEngagelab.prototype.uploadPlatformTokenAndroid = function (platform, token
     this.callNative("uploadPlatformToken", [platform, token, region], null);
 }
 
+/**
+ * 设置tcp 是否使用ssl，该方法只有ios可用。
+ * android使用方式：
+ * 1、在AndroidManifest.xml的application中添加android:name="com.engagelab.push.MTPushApplication"
+ * 2、在src/main/assets/下添加mt_engagelab_cordova_push_config文件（可查看example文件夹下的mt_engagelab_cordova_push_config文件）
+ * mt_engagelab_cordova_push_config文件内容：
+ * {
+ *"tcp_ssl": true,
+ *"debug":true
+ *}
+ * <p>
+ * 初始化前调用
+ * @param enable  设置tcp 是否使用ssl，true为使用ssl，false为不使用ssl
+ */
+MTPushEngagelab.prototype.setTcpSSLIos = function (enable) {
+    console.log("setTcpSSL:" + enable);
+    this.callNative("setTcpSSL", [enable], null);
+}
 
 if (!window.plugins) {
     window.plugins = {};

@@ -16,7 +16,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -25,7 +27,7 @@ import java.util.Set;
  */
 public class MTPushEngagelab extends CordovaPlugin {
     private static final String TAG = "MTPushEngagelab";
-    private static boolean DEBUG = false;
+    public static boolean DEBUG = false;
 
 
     private static com.engagelab.push.MTPushEngagelab instance;
@@ -48,16 +50,19 @@ public class MTPushEngagelab extends CordovaPlugin {
         cordovaActivity = null;
         instance = null;
     }
+    private static List<CommonReceiverCache> onCommonReceiverCache = new ArrayList<CommonReceiverCache>();
 
-    public static void onCommonReceiver(String name, String data) {
+    public static synchronized void onCommonReceiver(String name, String data) {
         MTPushEngagelab.logD(TAG, "onCommonReceiver name =" + name);
         MTPushEngagelab.logD(TAG, "onCommonReceiver data =" + data);
         if (instance == null) {
             MTPushEngagelab.logD(TAG, "onCommonReceiver instance == null");
+            onCommonReceiverCache.add(new CommonReceiverCache(name, data));
             return;
         }
         if (null == cordovaActivity) {
             MTPushEngagelab.logD(TAG, "onCommonReceiver cordovaActivity == null");
+            onCommonReceiverCache.add(new CommonReceiverCache(name, data));
             return;
         }
         try {
@@ -74,6 +79,34 @@ public class MTPushEngagelab extends CordovaPlugin {
             });
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+    }
+
+    private static synchronized void sendCommonReceiverCache() {
+        if (!onCommonReceiverCache.isEmpty()) {
+            logD(TAG, "sendCommonReceiverCache:" + onCommonReceiverCache.size());
+            for (CommonReceiverCache c : onCommonReceiverCache) {
+                onCommonReceiver(c.getName(), c.getData());
+            }
+            onCommonReceiverCache.clear();
+        }
+    }
+
+    private static class CommonReceiverCache {
+        private String name;
+        private String data;
+
+        public CommonReceiverCache(String name, String data) {
+            this.name = name;
+            this.data = data;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getData() {
+            return data;
         }
     }
 
@@ -246,6 +279,7 @@ public class MTPushEngagelab extends CordovaPlugin {
         try {
             Context context = getApplicationContext();
             MTPushPrivatesApi.init(context);
+            sendCommonReceiverCache();
         } catch (Throwable e) {
             e.printStackTrace();
         }
